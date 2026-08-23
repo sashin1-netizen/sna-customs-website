@@ -1,47 +1,52 @@
 # S&A Customs Website
 
-Standalone digital platform for **S&A Customs**, Reservoir Hills, Durban, South Africa.
+Standalone client website for **S&A Customs**, Reservoir Hills, Durban, South Africa.
 
-## Purpose
+## Current build
 
-This repository contains the client-facing website and future digital build archive for S&A Customs.
+This repository now contains the active client-facing GitHub Pages build, not the earlier single-file prototype.
 
-The platform is designed around:
+The site currently includes:
 
-- Custom vehicle builds
-- Engine and DSG swaps
-- Custom wiring
-- Restoration
-- Panel and paint
-- Performance projects
-- Build documentation
-- Automotive media
-- Qualified customer enquiries
+- Cinematic R36-led hero treatment using real S&A-related media
+- Documented 10.7 @ 209 km/h R36 performance proof
+- Build archive presentation
+- Integrated Auto Rush / customer video coverage
+- Workshop capability sections
+- Mobile-first responsive behaviour
+- Scroll-reveal interaction system
+- Separate production CSS and JavaScript assets
+- WhatsApp-led enquiry flow
+- Independent GitHub Pages deployment
+
+## Structure
+
+```text
+.
+├── index.html
+├── assets/
+│   ├── site.css
+│   └── site.js
+├── .github/
+│   └── workflows/
+│       └── deploy-pages.yml
+├── .nojekyll
+└── README.md
+```
 
 ## Creative direction
 
-South African automotive culture meets modern editorial design.
+South African automotive culture meets modern editorial and motorsport presentation.
 
-The visual system prioritises real S&A vehicles, workshop footage, technical specifications, documented performance and third-party media instead of stock imagery or generic automotive templates.
+The visual system prioritises S&A's actual builds, documented performance, workshop disciplines and third-party automotive coverage instead of generic mechanic-site conventions.
 
-## Current prototype
+## Content rules
 
-The current version is a standalone static client preview deployed independently from Prime Presence Atelier.
-
-## Deployment
-
-GitHub Pages deployment is handled by `.github/workflows/deploy-pages.yml` on every push to `main`.
-
-## Development principles
-
-- Mobile-first
-- Real project media first
+- Real S&A media first
 - No fabricated awards or specifications
-- Performance-conscious
-- Accessible and responsive
-- Build archive ready
-- WhatsApp-led conversion flow
-- SEO-ready architecture
+- Third-party media used as supporting proof
+- Placeholder imagery must never be presented as an S&A-owned build
+- Mobile presentation is treated as primary because discovery is expected to come heavily from social and WhatsApp
 
 ## Business information
 
@@ -49,3 +54,7 @@ S&A Customs
 19 Pridley Road  
 Reservoir Hills, Durban, South Africa  
 info@snacustoms.co.za
+
+## Deployment
+
+GitHub Pages deploys from `main` through `.github/workflows/deploy-pages.yml`.
