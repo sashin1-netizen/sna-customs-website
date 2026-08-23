@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://sashin1-netizen.github.io/sna-customs-website/sitemap.xml
