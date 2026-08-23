@@ -1,6 +1,7 @@
-@import url("site-base.css?v=type-1");
-@import url("polish.css?v=type-1");
-@import url("video-hero.css?v=type-1");
+@import url("site-base.css?v=client-1");
+@import url("polish.css?v=client-1");
+@import url("video-hero.css?v=client-1");
+@import url("client-ready.css?v=client-1");
 
 /* S&A TYPE SYSTEM — motorsport editorial + engineering UI */
 :root{--display:"Arial Narrow","Aptos Narrow","Roboto Condensed","Liberation Sans Narrow",Impact,sans-serif;--body:"Segoe UI",Inter,Arial,sans-serif;--mono:"SFMono-Regular","Roboto Mono",Consolas,"Liberation Mono",monospace;--track-display:-.072em;--track-ui:.105em}
