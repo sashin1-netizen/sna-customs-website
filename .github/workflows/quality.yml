@@ -1,0 +1,44 @@
+name: Client-ready quality gate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Validate site structure and internal links
+        run: python scripts/validate_site.py
+
+      - name: Check for merge conflict markers
+        run: |
+          if grep -RInE '^(<<<<<<<|=======|>>>>>>>)' --include='*.html' --include='*.css' --include='*.js' .; then
+            echo 'Merge conflict markers found.'
+            exit 1
+          fi
+
+      - name: Confirm production hero assets
+        run: |
+          test -s assets/hero-desktop-hq.mp4
+          test -s assets/hero-mobile-hq.mp4
+          python - <<'PY'
+          from pathlib import Path
+          for name in ('assets/hero-desktop-hq.mp4','assets/hero-mobile-hq.mp4'):
+              size = Path(name).stat().st_size
+              assert size > 1_000_000, f'{name} unexpectedly small: {size}'
+              print(name, size)
+          PY
