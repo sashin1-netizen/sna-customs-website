@@ -1,35 +1,65 @@
 (() => {
-  const current = document.currentScript?.src || location.href;
+  const currentScriptUrl = new URL(document.currentScript?.src || location.href);
+  const assetUrl = name => new URL(name, currentScriptUrl).href;
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
+
   const load = name => new Promise((resolve, reject) => {
     const script = document.createElement('script');
-    script.src = new URL(name, current).href;
+    script.src = assetUrl(name);
+    script.defer = true;
     script.onload = resolve;
     script.onerror = reject;
     document.body.appendChild(script);
   });
 
-  const installHQHero = () => {
+  const installHeroResilience = () => {
     const video = document.querySelector('.hero-burnout-video');
     if (!video) return;
-    const mobile = matchMedia('(max-width: 820px)').matches;
-    const src = mobile ? 'assets/hero-mobile-hq.mp4?v=hq-20260823' : 'assets/hero-desktop-hq.mp4?v=hq-20260823';
-    video.querySelectorAll('source').forEach(source => source.remove());
-    video.src = src;
-    video.preload = 'auto';
+
+    const root = document.documentElement;
+    const markFailed = () => root.classList.add('hero-video-failed');
+    const markReady = () => {
+      root.classList.remove('hero-video-failed');
+      root.classList.add('hero-video-ready');
+    };
+
     video.muted = true;
     video.playsInline = true;
-    video.load();
-    video.play().catch(() => {});
-    document.documentElement.classList.add('hero-hq-active');
+    video.addEventListener('loadeddata', markReady, { once: true });
+    video.addEventListener('error', markFailed);
+    video.querySelectorAll('source').forEach(source => source.addEventListener('error', () => {
+      if (video.networkState === HTMLMediaElement.NETWORK_NO_SOURCE) markFailed();
+    }));
+
+    const applyMotionPreference = () => {
+      if (reduceMotion.matches) {
+        root.classList.add('hero-motion-reduced');
+        video.pause();
+      } else {
+        root.classList.remove('hero-motion-reduced');
+        video.play().catch(() => {
+          /* Autoplay can be blocked; the poster remains the visual fallback. */
+        });
+      }
+    };
+
+    applyMotionPreference();
+    reduceMotion.addEventListener?.('change', applyMotionPreference);
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden && !reduceMotion.matches) video.play().catch(() => {});
+    });
+  };
+
+  const boot = () => {
+    installHeroResilience();
+    load('./site-base.js?v=ready-1')
+      .catch(() => null)
+      .then(() => load('./polish.js?v=ready-1').catch(() => null));
   };
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', installHQHero, { once: true });
+    document.addEventListener('DOMContentLoaded', boot, { once: true });
   } else {
-    installHQHero();
+    boot();
   }
-
-  load('site-base.js?v=hq-20260823')
-    .catch(() => null)
-    .then(() => load('polish.js?v=hq-20260823').catch(() => null));
 })();
