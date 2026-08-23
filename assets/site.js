@@ -10,7 +10,5 @@
 
   load('site-base.js')
     .catch(() => null)
-    .then(() => load('polish.js').catch(() => null))
-    .then(() => load('cinematic.js'))
-    .catch(err => console.error('S&A cinematic layer failed to load', err));
+    .then(() => load('polish.js').catch(() => null));
 })();
