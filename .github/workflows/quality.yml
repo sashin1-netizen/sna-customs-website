@@ -1,0 +1,30 @@
+name: Quality gates
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements-dev.txt
+      - run: python scripts/qa.py
+      - run: python -m playwright install --with-deps chromium firefox webkit
+      - name: Serve site
+        run: |
+          python -m http.server 4173 >/tmp/sna-http.log 2>&1 &
+          sleep 2
+      - run: python tests/site_test.py
+      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        if: always()
+        with:
+          name: responsive-screenshots
+          path: test-results/

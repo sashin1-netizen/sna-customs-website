@@ -1,60 +1,52 @@
 # S&A Customs Website
 
-Standalone client website for **S&A Customs**, Reservoir Hills, Durban, South Africa.
+Production-oriented website for **S&A Customs**, Reservoir Hills, Durban.
 
-## Current build
+## Product goal
 
-This repository now contains the active client-facing GitHub Pages build, not the earlier single-file prototype.
+Turn social/media interest into qualified build enquiries while proving the workshop through documented work rather than generic claims.
 
-The site currently includes:
+## Architecture
 
-- Cinematic R36-led hero treatment using real S&A-related media
-- Documented 10.7 @ 209 km/h R36 performance proof
-- Build archive presentation
-- Integrated Auto Rush / customer video coverage
-- Workshop capability sections
-- Mobile-first responsive behaviour
-- Scroll-reveal interaction system
-- Separate production CSS and JavaScript assets
-- WhatsApp-led enquiry flow
-- Independent GitHub Pages deployment
+A deliberately lightweight static architecture: semantic HTML, a responsive design system, and progressive JavaScript for navigation, reveal motion, on-demand video and the WhatsApp project brief. No framework is used because the current product has no authentication, database or application-state requirement.
 
-## Structure
+## Routes
 
-```text
-.
-├── index.html
-├── assets/
-│   ├── site.css
-│   └── site.js
-├── .github/
-│   └── workflows/
-│       └── deploy-pages.yml
-├── .nojekyll
-└── README.md
+- `/` — brand, proof, projects and conversion
+- `/builds/r36-dsg-mk2.html` — flagship build story
+- `/workshop.html` — workshop capability narrative
+- `/start-a-build.html` — qualified project brief → WhatsApp
+- `/privacy.html` — privacy note
+- `/404.html` — custom error route
+
+## Quality contract
+
+- Brand-specific automotive art direction
+- Verified/documented project references only
+- No stock image presented as S&A work
+- Mobile-first composition and no horizontal overflow
+- Keyboard focus and reduced-motion support
+- YouTube loads only after explicit interaction
+- Structured SEO metadata and sitemap
+- Cross-browser Playwright checks
+- Exact production deployment through GitHub Pages
+
+## Local QA
+
+```bash
+python -m pip install -r requirements-dev.txt
+python scripts/qa.py
+python -m playwright install chromium firefox webkit
+python -m http.server 4173
+# in another terminal
+python tests/site_test.py
 ```
 
-## Creative direction
+## Public proof references
 
-South African automotive culture meets modern editorial and motorsport presentation.
-
-The visual system prioritises S&A's actual builds, documented performance, workshop disciplines and third-party automotive coverage instead of generic mechanic-site conventions.
-
-## Content rules
-
-- Real S&A media first
-- No fabricated awards or specifications
-- Third-party media used as supporting proof
-- Placeholder imagery must never be presented as an S&A-owned build
-- Mobile presentation is treated as primary because discovery is expected to come heavily from social and WhatsApp
-
-## Business information
-
-S&A Customs  
-19 Pridley Road  
-Reservoir Hills, Durban, South Africa  
-info@snacustoms.co.za
-
-## Deployment
-
-GitHub Pages deploys from `main` through `.github/workflows/deploy-pages.yml`.
+- Auto Rush R36 DSG Mk2 feature: https://www.youtube.com/watch?v=C-q4s1PIGtU
+- Golf 1 customer rebuild: https://www.youtube.com/watch?v=ew-j-CzPm-Y
+- R36 10.7 run: https://www.instagram.com/reel/DWMsagJCOXC/
+- MK5 R32 project: https://www.instagram.com/p/DVqogUFCJ6g/
+- BMW E30 325i project: https://www.instagram.com/p/DT1KjwSiKHM/
+- Instagram: https://www.instagram.com/snacustoms_za/
