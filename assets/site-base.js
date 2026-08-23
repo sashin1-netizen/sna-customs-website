@@ -15,6 +15,7 @@
     menuButton.setAttribute('aria-expanded', 'false');
     mobileNav.hidden = true;
   };
+
   if (menuButton && mobileNav) {
     menuButton.addEventListener('click', () => {
       const open = menuButton.getAttribute('aria-expanded') === 'true';
@@ -74,6 +75,17 @@
       const option = [...workSelect.options].find(o => o.value.toLowerCase() === requestedWork.toLowerCase() || o.text.toLowerCase() === requestedWork.toLowerCase());
       if (option) workSelect.value = option.value;
     }
+
+    const fieldsets = qsa('fieldset', form);
+    const progress = qsa('.brief-progress span', form);
+    const setProgress = index => {
+      progress.forEach((item, i) => item.classList.toggle('is-active', i <= index));
+    };
+    fieldsets.forEach((fieldset, index) => {
+      fieldset.addEventListener('focusin', () => setProgress(index));
+      fieldset.addEventListener('click', () => setProgress(index));
+    });
+
     form.addEventListener('submit', e => {
       e.preventDefault();
       if (!form.reportValidity()) return;
@@ -96,7 +108,8 @@
       ];
       track('sna_project_brief_open', { work: String(data.get('work') || ''), timing: String(data.get('timing') || ''), budget: String(data.get('budget') || '') });
       const url = `https://wa.me/27747942955?text=${encodeURIComponent(lines.join('\n'))}`;
-      window.open(url, '_blank', 'noopener,noreferrer');
+      const opened = window.open(url, '_blank', 'noopener,noreferrer');
+      if (!opened) window.location.assign(url);
     });
   }
 
