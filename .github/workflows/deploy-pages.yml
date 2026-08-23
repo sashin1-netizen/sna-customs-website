@@ -16,25 +16,52 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  deploy:
+  validate-and-deploy:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v6
+      - name: Checkout release commit
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Validate client site
+        run: python scripts/validate_site.py
+
+      - name: Reject merge conflict markers
+        run: |
+          if grep -RInE '^(<<<<<<<|=======|>>>>>>>)' --include='*.html' --include='*.css' --include='*.js' .; then
+            echo 'Merge conflict markers found.'
+            exit 1
+          fi
+
+      - name: Verify production media payloads
+        run: |
+          test -s assets/hero-desktop-hq.mp4
+          test -s assets/hero-mobile-hq.mp4
+          python - <<'PY'
+          from pathlib import Path
+          for name in ('assets/hero-desktop-hq.mp4','assets/hero-mobile-hq.mp4'):
+              size = Path(name).stat().st_size
+              assert size > 1_000_000, f'{name} unexpectedly small: {size}'
+              print(f'{name}: {size:,} bytes')
+          PY
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
         with:
           enablement: true
 
-      - name: Upload static site
+      - name: Upload exact validated site
         uses: actions/upload-pages-artifact@v4
         with:
           path: .
 
-      - name: Deploy to GitHub Pages
+      - name: Deploy validated artifact
         id: deployment
         uses: actions/deploy-pages@v4
