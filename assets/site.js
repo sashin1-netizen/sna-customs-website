@@ -8,5 +8,8 @@
     script.onerror = reject;
     document.head.appendChild(script);
   });
-  load('site-base.js').then(() => load('polish.js')).catch(() => {});
+  load('site-base.js')
+    .then(() => load('polish.js'))
+    .then(() => load('cinematic.js'))
+    .catch(() => {});
 })();
