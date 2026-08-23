@@ -58,3 +58,5 @@ info@snacustoms.co.za
 ## Deployment
 
 GitHub Pages deploys from `main` through `.github/workflows/deploy-pages.yml`.
+
+Deployment refresh triggered: 2026-08-23 20:35 SAST.
